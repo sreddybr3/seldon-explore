@@ -1,0 +1,29 @@
+apiVersion: machinelearning.seldon.io/v1
+kind: SeldonDeployment
+metadata:
+  name: rest-tfserving-grph
+spec:
+  name: resttfserving-grph
+  protocol: tensorflow
+  transport: rest
+  predictors:
+  - graph:
+      endpoint:
+        service_host: rest-tfserving-model-half-plus-two
+        service_port: 8501
+      implementation: UNKNOWN_IMPLEMENTATION
+      name: half-plus-two
+      type: MODEL
+      traffic: 80
+  - graph:
+      endpoint:
+        service_host: rest-tfserving-model-half-plus-two
+        service_port: 8501
+      implementation: UNKNOWN_IMPLEMENTATION
+      name: half-plus-three
+      type: MODEL
+      traffic: 20
+      # name: rest-tfserving-model-half-plus-two
+      # endpoint:
+      #   service_host: rest-tfserving-model-half-plus-two
+      #   service_port: 8501

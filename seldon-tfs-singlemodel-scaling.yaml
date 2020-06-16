@@ -1,0 +1,35 @@
+apiVersion: machinelearning.seldon.io/v1
+kind: SeldonDeployment
+metadata:
+  name: rest-tfserving-scale
+spec:
+  name: resttfserving-scale
+  protocol: tensorflow
+  transport: rest
+  predictors:
+  - componentSpecs:
+    - hpaSpec:
+        maxReplicas: 3
+        metrics:
+        - resource:
+            name: cpu
+            targetAverageUtilization: 10
+          type: Resource
+        minReplicas: 1
+      spec:
+        containers:
+        - image: sreddybr3/tfs-prebaked:0.0.3
+          name: half-plus-two
+          resources:
+            requests:
+              cpu: '0.1'
+          ports:
+          - containerPort: 8501
+            name: http
+    graph:
+      name: half-plus-two
+      type: MODEL
+      endpoint:
+        service_port: 8501
+    name: model
+    replicas: 1

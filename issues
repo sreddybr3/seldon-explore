@@ -1,0 +1,18 @@
+graph node is always referenced by a componentSpecs container name:
+https://github.com/SeldonIO/seldon-core/issues/1960
+
+workaround Multi-model serving without model name in CR:
+if we use different models from the model sever, 
+{"status":{"code":500,"info":"Failed to find model half-plus-three"}}Not
+i.e. orchestrator is CR aware and is not just a proxy; 
+
+workaround Multi-model serving with model name nad graph only:
+    kubectl create -f sledon-graph-only.yaml
+    Error from server (SeldonDeployment.machinelearing.seldon.io "resttfserving-grph" is invalid: spec.predictors[0].graph: 
+    Invalid value: "half-plus-two": Can't find container for Predictive Unit): error when creating "sledon-graph-only.yaml": admission webhook "v1.vseldondeployment.kb.io" denied the request: SeldonDeployment.machinelearing.seldon.io "resttfserving-grph" is invalid: spec.predictors[0].graph: 
+    Invalid value: "half-plus-two": Can't find container for Predictive Unit
+
+stability:
+(venv-seldon) i058650@C02ZKSEVMD6M seldon % k create -f seldon-tfs-multimodel-same-server.yaml
+Error from server (InternalError): error when creating "seldon-tfs-multimodel-same-server.yaml": Internal error occurred: failed calling webhook "v1.mseldondeployment.kb.io": Post https://seldon-webhook-service.seldon-system.svc:443/mutate-machinelearning-seldon-io-v1-seldondeployment?timeout=30s: stream error: stream ID 143; INTERNAL_ERROR
+

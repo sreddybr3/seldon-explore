@@ -1,0 +1,41 @@
+apiVersion: machinelearning.seldon.io/v1
+kind: SeldonDeployment
+metadata:
+  name: abtest
+spec:
+  name: abtest
+  protocol: tensorflow
+  transport: rest
+  predictors:
+  - componentSpecs:
+    - spec:
+        containers:
+        - image: sreddybr3/tfs-prebaked:0.0.3
+          name: half-plus-two
+          ports:
+          - containerPort: 8501
+            name: http
+    graph:
+      name: random-abtest
+      implementation: RANDOM_ABTEST
+      parameters:
+      - name: ratioA
+        value: '0.5'
+        type: FLOAT
+      children:
+      - name: half-plus-two
+        endpoint:
+          type: REST
+          service_host: abtest-model-half-plus-two
+          service_port: 8501
+        type: MODEL
+        children: []
+      - name: half-plus-three
+        endpoint:
+          type: REST
+          service_host: abtest-model-half-plus-two
+          service_port: 8501
+        type: MODEL
+        children: []
+    name: abtest
+    replicas: 1
