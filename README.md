@@ -7,15 +7,12 @@ explore seldon
 
 docker run -it --rm --entrypoint=/bin/bash tensorflow/serving:1.15.0
 
-WORKDIR /
-RUN mkdir /models/half_plus_two
-ADD models/half_plus_two /models/
-ENV MODEL_NAME=half_plus_two
-
-
 docker build -t sreddybr3/tfs-prebaked:0.0.3 .
+
 docker push sreddybr3/tfs-prebaked:0.0.3
+
 docker run -it --rm --entrypoint=/bin/bash sreddybr3/tfs-prebaked:0.0.3
+
 docker run -p 8501:8501 -it --rm sreddybr3/tfs-prebaked:0.0.3
 
 ### Test:
